@@ -1,0 +1,52 @@
+{
+    "wing": {
+        "planform": {
+            "aspect_ratio": 12,
+            "taper_ratio": 0.5
+        },
+        "airfoil_lift_slope": 5.7360,
+        "nodes_per_semispan":99,
+        "washout": {
+            "distribution": "optimum",
+            "distribution_options": [
+                "none: no twist",
+                "linear: linear twist distribution",
+                "optimum: optimum twist distribution"
+            ],
+            "amount[deg]": 0,
+            "amount_options": [
+                "value: real number in degrees",
+                "optimum: requires CL_design"
+            ],
+            "CL_design": 0.4
+        },
+        "aileron": {
+            "begin[z/b]": 0.17,
+            "end[z/b]": 0.5,
+            "begin[cf/c]": 0.35,
+            "end[cf/c]": 0.35,
+            "hinge_efficiency": 0.85
+        }
+    },
+    "condition": {
+        "alpha_root[deg]": 2,
+        "alpha_options": [
+            "value: real number in degrees",
+            "CL: requires CL"
+        ],
+        "CL": 0.4,
+        "aileron_deflection[deg]": 0,
+        "pbar": "value",
+        "pbar_options": [
+            "value: real number nondimensional rolling rate",
+            "steady: computes steady-state rolling rate"
+        ]
+    },
+    "view": {
+        "planform": true,
+        "washout_distribution": true,
+        "aileron_distribution": true,
+        "CL_hat_distributions": true,
+        "CL_tilde_distributions": true
+    }
+}
