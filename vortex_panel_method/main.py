@@ -1,29 +1,32 @@
 import numpy as np
 import json
 from tabulate import tabulate
+from pathlib import Path
+import matplotlib.pyplot as plt
 
-# Open all needed json files for the airfoils being examined. 
-# json files are saved in zip file
+# Directory containing this script
+BASE_DIR = Path(__file__).parent
 
-with open('10data.json', 'r') as file10:
+# Open all needed json files for the airfoils being examined.
+with open(BASE_DIR / '10data.json', 'r') as file10:
     data10 = json.load(file10)
-# define parameters for NACA 2412 airfoil with 10 nodes
+
 geometry10 = data10["geometry"]
 v10 = data10["freestream_velocity"]
 
-with open('200data.json', 'r') as file2412200:
+with open(BASE_DIR / '200data.json', 'r') as file2412200:
     data2412200 = json.load(file2412200)
 
 geometry2412200 = data2412200["geometry"]
 v2412200 = data2412200["freestream_velocity"]
 
-with open('2421data.json', 'r') as file2421:
+with open(BASE_DIR / '2421data.json', 'r') as file2421:
     data2421 = json.load(file2421)
 
 geometry2421 = data2421["geometry"]
 v2421 = data2421["freestream_velocity"]
 
-with open('0015data.json', 'r') as file0015:
+with open(BASE_DIR / '0015data.json', 'r') as file0015:
     data0015 = json.load(file0015)
 
 geometry0015 = data0015["geometry"]
@@ -32,12 +35,15 @@ v0015 = data0015["freestream_velocity"]
 # Set the range of angles of attack that will be determined.
 range_alpha = np.arange(-12, 17, 2)
 
-
 # Builds a function that outputs cL, cMLE, and cMC4 by calculating the gamma vector
 def coef(geometry, V, alpha):
     alpha = np.radians(alpha)
-    n_pts = np.loadtxt(geometry, dtype=float)
 
+    geom_path = Path(geometry)
+    if not geom_path.is_absolute():
+        geom_path = BASE_DIR / geom_path
+
+    n_pts = np.loadtxt(geom_path, dtype=float)
     # specify points, control points, dx, dy, length, and applied conditions
     n = n_pts.shape[0]
     c_pts = 0.5 * (n_pts[1:] + n_pts[:-1])
@@ -141,3 +147,21 @@ table(geometry2421, v2421)
 print()
 print("0015 Airfoil with 200 Nodes")
 table(geometry0015, v0015)
+
+geom_2412200_path = Path(geometry2412200)
+if not geom_2412200_path.is_absolute():
+    geom_2412200_path = BASE_DIR / geom_2412200_path
+
+pts_2412200 = np.loadtxt(geom_2412200_path, dtype=float)
+
+x = pts_2412200[:, 0]
+y = pts_2412200[:, 1]
+
+plt.figure()
+plt.plot(x, y, marker='o', linestyle='-')
+plt.axis('equal')
+plt.xlabel("x/c")
+plt.ylabel("y/c")
+plt.title("NACA 2412 Airfoil Geometry (200 Nodes)")
+plt.grid(True)
+plt.show()
